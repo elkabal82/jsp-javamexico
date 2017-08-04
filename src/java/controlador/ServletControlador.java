@@ -35,17 +35,35 @@ public class ServletControlador extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         Datos datos = new Datos();
-        datos.setNombre(request.getParameter("nombre"));
-        datos.setOpciones(request.getParameterValues("opciones"));
+        //Si lo que recibimos de la pag. index en el campo nombre esta vacio lo mandamos a la pag.error
+        //de lo contrario guardamos en datos
+        if(request.getParameter("nombre").equals("")){
+            request.getRequestDispatcher("error.jsp").forward(request, response);  
+        }else{
+            datos.setNombre(request.getParameter("nombre"));
+        }
         
+        //Si opciones no tienen nada o es mayor de una seleccion va la a pag. error
+        //de lo contrario gurdamos la info en datos
+        if(request.getParameterValues("opciones") == null || request.getParameterValues("opciones").length > 1){
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }else{
+            
+            datos.setOpciones(request.getParameterValues("opciones"));
+        }
+        
+       request.getRequestDispatcher("resultados.jsp").forward(request, response);
+        
+        /*
         //Validamos los datos
-        if( datos.getNombre().equals(""))
-        request.getRequestDispatcher("error.jsp").forward(request, response);
+        if( datos.getNombre().equals("")){
+            request.getRequestDispatcher("error.jsp").forward(request, response);
 //Si el usuario mete mas de un valor o no mete ninguno, ERROR :)
-        else if( datos.getOpciones().length > 1 )
-        request.getRequestDispatcher("error.jsp").forward(request, response);
-        
+        }else if( datos.getOpciones().length > 1){
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
         request.getRequestDispatcher("resultados.jsp").forward(request, response);
+    */    
     }
     
 
